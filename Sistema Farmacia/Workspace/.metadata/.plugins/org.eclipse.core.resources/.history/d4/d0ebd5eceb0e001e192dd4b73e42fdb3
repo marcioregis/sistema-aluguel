@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html"
+	template="/templates/modeloSistema.xhtml">
+
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmimoveis">
+			<p:dataTable id="tbimoveis" widgetVar="tabelaImoveis"
+				emptyMessage="Nenhum registro encontrado!"
+				value="#{MBImoveis.itens}" var="item"
+				filteredValue="#{MBImoveis.itensFiltrados}" paginator="true"
+				rows="7">
+
+				<f:facet name="header">Lista de Imoveis</f:facet>
+
+				// indexa por codigo e busca por codigo				
+				<p:column headerText="Codigo" sortBy="#{item.codigo}"
+					filterBy="#{item.codigo}">
+					<h:outputText value="#{item.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{item.nome}"
+					filterBy="#{item.nome}">
+					<h:outputText value="#{item.nome}" />
+				</p:column>
+
+				<p:column headerText="Opçoes">
+					<p:commandButton icon="ui-icon-trash"
+						oncomplete="PF('dlgimoExcluir').show();"
+						update=":frmimoExcluir:pnimoExcluir">
+						<f:setPropertyActionListener value="#{item}"
+						target="#{MBImoveis.imoveis}"></f:setPropertyActionListener>
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-pencil"
+						oncomplete="PF('dlgimoEditar').show();"
+						update=":frmimoEditar:pnimoEditar">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{MBImoveis.imoveis}"></f:setPropertyActionListener>
+					</p:commandButton>
+
+				</p:column>
+
+				<f:facet name="footer">
+					<p:commandButton value="Novo"
+						actionListener="#{MBImoveis.prepararNovo}"
+						oncomplete="PF('dlgimoNovo').show();"
+						update=":frmimoNovo:pnimoNovo" />
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+		
+		<p:dialog widgetVar="dlgimoNovo" closable="false" draggable="false"
+			resizable="false" header="Cadastrar Imovel" modal="true"
+			appendTo="@(body)">
+			<h:form id="frmimoNovo">
+				<h:panelGrid id="pnimoNovo" columns="2">
+					<p:outputLabel value="Nome:" for="txtNomNovo" />
+					<p:inputText size="30" maxlength="50" id="txtNomNovo"
+						value="#{MBImoveis.imoveis.nome}" required="true" 
+						requiredMessage="O Campo Nome é obrigatorio" />
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton value="Gravar"
+						actionListener="#{MBImoveis.novo}"
+						oncomplete="verificar(xhr, status, args, 'dlgimoNovo', 'tbimoveis');"
+						update=":frmimoveis:tbimoveis :msgGlobal" />
+					<p:commandButton value="Canelar" process="@this" onclick="PF('dlgimoNovo').hide();" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgimoExcluir" closable="false" draggable="false"
+			resizable="false" header="Excluir Imoveis" modal="true"
+			appendTo="@(body)">
+			<h:form id="frmforExcluir">
+				<h:panelGrid id="pnimoExcluir" columns="2">
+					<h:outputText value="Codigo" />
+					<h:outputText value="#{MBImoveis.imoveis.codigo}" />
+					<h:outputText value="Nome" />
+					<h:outputText value="#{MBImoveis.imoveis.nome}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Excluir"
+						actionListener="#{MBImoveis.excluir}"
+						oncomplete="PF('dlgimoExcluir').hide(); PF('tabelaImoveis').clearFilters();"
+						update=":frmimoveis:tbimoveis :msgGlobal" />
+					<p:commandButton value="Canelar"
+						onclick="PF('dlgforExcluir').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="dlgimoEditar" closable="false" draggable="false"
+			resizable="false" header="Editar Imoveis" modal="true"
+			appendTo="@(body)">
+			<h:form id="frmforEditar">
+				<h:panelGrid id="pnimoEditar" columns="2">
+					<h:outputText value="Codigo" />
+					<h:outputText value="#{MBImoveis.imoveis.codigo}" />
+
+					<h:outputText value="Nome" for="txtEdtfor" />
+					<h:inputText value="#{MBImoveis.imoveis.nome}" required="true" id="txtEdtimo"
+					requiredMessage="O campo nome é obrigatorio" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<p:commandButton value="Editar"
+						actionListener="#{MBImoveis.editar}"
+						oncomplete="verificar(xhr, status, args, 'dlgforEditar', 'tbimoveis');"
+						update=":frmimoveis:tbimoveis :msgGlobal" />
+					<p:commandButton value="Canelar" process="@this"
+						onclick="PF('dlgimoEditar').hide();" />
+				</h:panelGrid>
+
+			</h:form>
+		</p:dialog>
+	</ui:define>>
+</ui:composition>
