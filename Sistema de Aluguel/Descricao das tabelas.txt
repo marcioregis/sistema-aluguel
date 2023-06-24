@@ -1,0 +1,34 @@
+Cadastro de Imoveis
+codigo
+nome
+endereco
+numero
+bairro
+cidade
+cep
+complemento
+valaluguel
+dataaluguel
+inquilinos_codigo
+
+
+Cadastro de Inquilino
+codigo
+nome
+cpf
+cnpj
+email
+endereco
+numero
+bairro
+cidade
+cep
+complemento
+
+Starting Tomcat v7.0 Server as localhost has encoutered a problem
+
+				<p:menuitem value="Fornecedores" outcome="/pages/fornecedores.xhtml" />
+			<p:menuitem value="Produtos" outcome="/pages/produtos.xhtml" />
+	
+
+

@@ -1,0 +1,3 @@
+select produtos.codigo, produtos.descricao, produtos.quantidade, produtos.preco,fornecedores.descricao, produtos.fornecedores_codigo, 
+SUM(preco*quantidade) as Total from produtos, fornecedores where
+produtos.fornecedores_codigo = fornecedores.codigo group by codigo
